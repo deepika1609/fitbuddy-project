@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – FitBuddy All Users</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">💪</div>
+        <span>FitBuddy</span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/view-all-users" class="nav-link active">Admin Dashboard</a>
+        <a href="/docs" target="_blank" class="nav-btn">API Docs</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="max-width: 1400px;">
+    <div class="page-header">
+      <h1 class="page-title">📊 Admin Dashboard - All Users & Workout Plans</h1>
+      <p class="page-subtitle">Track registered users, review original AI plans vs feedback-updated plans, and monitor system activity.</p>
+    </div>
+
+    <div class="glass-card">
+      {% if users %}
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Weight</th>
+              <th>Goal</th>
+              <th>Intensity</th>
+              <th>Original Plan</th>
+              <th>Updated Plan</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td><strong>#{{ user.id }}</strong></td>
+              <td><strong>{{ user.name }}</strong></td>
+              <td>{{ user.age }}</td>
+              <td>{{ user.weight }} kg</td>
+              <td><span style="color: #93c5fd; font-weight: 500;">{{ user.goal }}</span></td>
+              <td>
+                {% if user.intensity.lower() == 'high' %}
+                  <span class="badge badge-high">High</span>
+                {% elif user.intensity.lower() == 'medium' %}
+                  <span class="badge badge-medium">Medium</span>
+                {% else %}
+                  <span class="badge badge-low">Low</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="plan-cell-pre">{{ user.original_plan }}</div>
+              </td>
+              <td>
+                <div class="plan-cell-pre" style="{% if user.updated_plan != 'Not updated' %}border-left: 2px solid var(--accent-success);{% endif %}">
+                  {{ user.updated_plan }}
+                </div>
+              </td>
+              <td>
+                <form action="/delete-user/{{ user.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete user #{{ user.id }}?');">
+                  <button type="submit" class="btn-danger">🗑️ Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p style="font-size: 1.2rem; margin-bottom: 1rem;">No users or fitness plans found in the database yet.</p>
+        <a href="/" class="nav-btn" style="display: inline-block;">➕ Generate First Plan</a>
+      </div>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 FitBuddy – AI Fitness Plan Generator. Built with FastAPI & Google Gemini Models.</p>
+  </footer>
+
+</body>
+</html>

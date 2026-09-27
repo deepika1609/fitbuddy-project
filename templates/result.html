@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Personalized Workout Plan – FitBuddy</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">💪</div>
+        <span>FitBuddy</span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/view-all-users" class="nav-link">Admin Dashboard</a>
+        <a href="/docs" target="_blank" class="nav-btn">API Docs</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1 class="page-title">🏋️ Your Personalized Workout Plan</h1>
+      <p class="page-subtitle">Tailored fitness routine and nutritional guidance generated specifically for your goal.</p>
+    </div>
+
+    {% if success_message %}
+    <div class="alert-success">
+      <span>✅</span>
+      <span>{{ success_message }}</span>
+    </div>
+    {% endif %}
+
+    <!-- User Information Summary Card -->
+    <div class="glass-card">
+      <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 1.2rem; color: #93c5fd;">
+        📋 User Profile & Parameters
+      </h2>
+      <div class="info-bar">
+        <div class="info-item">
+          <div class="info-label">Name</div>
+          <div class="info-value">{{ username }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">User ID</div>
+          <div class="info-value">{{ user_id }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Age</div>
+          <div class="info-value">{{ age }} yrs</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Weight</div>
+          <div class="info-value">{{ weight }} kg</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Fitness Goal</div>
+          <div class="info-value" style="font-size: 1.05rem;">{{ goal }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Intensity</div>
+          <div class="info-value">
+            {% if intensity.lower() == 'high' %}
+              <span class="badge badge-high">High</span>
+            {% elif intensity.lower() == 'medium' %}
+              <span class="badge badge-medium">Medium</span>
+            {% else %}
+              <span class="badge badge-low">Low</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7-Day Workout Plan Display -->
+    <div class="glass-card">
+      <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+        🗓️ 7-Day AI Workout Schedule
+        {% if updated_plan %}
+        <span class="badge badge-medium" style="font-size: 0.75rem;">REVISED & UPDATED</span>
+        {% endif %}
+      </h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+        Generated using <strong>Gemini 1.5 Pro</strong>
+      </p>
+
+      {% if updated_plan %}
+      <div class="plan-container">
+        <pre class="plan-pre">{{ updated_plan }}</pre>
+      </div>
+      <details style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+        <summary style="cursor: pointer; font-weight: 600;">View Original Generated Plan</summary>
+        <div class="plan-container" style="margin-top: 0.5rem; opacity: 0.85;">
+          <pre class="plan-pre">{{ workout_plan }}</pre>
+        </div>
+      </details>
+      {% else %}
+      <div class="plan-container">
+        <pre class="plan-pre">{{ workout_plan }}</pre>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Nutrition / Recovery Tip Section -->
+    <div class="tip-card">
+      <div class="tip-icon">💡</div>
+      <div>
+        <h3 class="tip-title">Nutrition & Recovery Tip (Powered by Gemini Flash)</h3>
+        <p class="tip-content">{{ nutrition_tip }}</p>
+      </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="glass-card">
+      <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 0.5rem; color: #f8fafc;">
+        📝 Share Your Feedback & Refine Plan
+      </h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+        Want more focus on cardio, extra rest days, or alternative exercises? Submit your feedback below and our Gemini Pro AI model will adjust your workout schedule!
+      </p>
+
+      <form action="/submit-feedback" method="POST">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="feedback_user_id">Confirm Unique User ID:</label>
+          <input type="number" id="feedback_user_id" name="user_id" value="{{ user_id }}" required readonly style="background: rgba(255, 255, 255, 0.05); color: #94a3b8; cursor: not-allowed;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label for="feedback">Your Feedback / Special Requests:</label>
+          <textarea id="feedback" name="feedback" rows="3" placeholder="e.g. Include more cardio, add yoga on Wednesday, reduce shoulder intensity..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);">
+          <span>🔄 Update Workout Plan</span>
+        </button>
+      </form>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 FitBuddy – AI Fitness Plan Generator. Built with FastAPI & Google Gemini Models.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy – AI Fitness Plan Generator</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">💪</div>
+        <span>FitBuddy</span>
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/view-all-users" class="nav-link">Admin Dashboard</a>
+        <a href="/docs" target="_blank" class="nav-btn">API Docs</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Input Form Container -->
+  <main>
+    <div class="page-header">
+      <h1 class="page-title">FitBuddy - AI Workout Generator</h1>
+      <p class="page-subtitle">Get your personalized 7-day workout plan powered by Google's Gemini AI models tailored to your exact fitness goals.</p>
+    </div>
+
+    <div class="glass-card" style="max-width: 650px; margin: 0 auto;">
+      <form action="/generate-workout" method="POST">
+        <div class="form-grid">
+          
+          <div class="form-group">
+            <label for="username">Full Name:</label>
+            <input type="text" id="username" name="username" placeholder="e.g. Shreya Sharma" required>
+          </div>
+
+          <div class="form-group">
+            <label for="user_id">Unique User ID (Numeric):</label>
+            <input type="number" id="user_id" name="user_id" placeholder="e.g. 101" required>
+          </div>
+
+          <div class="form-group">
+            <label for="age">Age (Years):</label>
+            <input type="number" id="age" name="age" min="10" max="100" placeholder="e.g. 25" required>
+          </div>
+
+          <div class="form-group">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" step="0.1" id="weight" name="weight" min="20" max="300" placeholder="e.g. 70.0" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="goal">Fitness Goal:</label>
+            <input type="text" id="goal" name="goal" placeholder="e.g., weight loss, muscle gain, lose belly fat, flexibility" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="intensity">Workout Intensity:</label>
+            <select id="intensity" name="intensity" required>
+              <option value="Low">Low (Beginner / Gentle Pace)</option>
+              <option value="Medium" selected>Medium (Intermediate / Moderate Pace)</option>
+              <option value="High">High (Advanced / Intense Pace)</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <span>⚡ Generate Fitness Plan</span>
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 FitBuddy – AI Fitness Plan Generator. Built with FastAPI & Google Gemini Models.</p>
+  </footer>
+
+</body>
+</html>
